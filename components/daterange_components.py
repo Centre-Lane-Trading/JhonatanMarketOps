@@ -13,9 +13,9 @@ def main_daterange():
         html.Div: A Dash HTML Div containing a DatePickerRange component.
     """
     return html.Div(
-        className="mt-10",  # CSS class to apply a top margin for spacing
+        className="",  # CSS class to apply a top margin for spacing
         children=[
-            # Create a DatePickerRange component
+            html.Label("Date Range:", className="text-md text-gray-500 pr-2"),
             dcc.DatePickerRange(
                 id="main-date-picker-range",  # Unique identifier for the date range picker
                 min_date_allowed=date(2015, 8, 5),  # Earliest date that can be selected

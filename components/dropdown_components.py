@@ -17,16 +17,16 @@ def main_dropdown():
         html.Div: A Dash HTML Div containing a Checklist component for feature selection.
     """
     return html.Div(
-        # Create a Checklist component
         dcc.Dropdown(
             # Generate the options for the checklist dynamically
             # Extracts the keys (features) from the feature_units_dict
-            options=[item[0] for item in feature_units_dict.items()],
+            options=sorted(item[0] for item in feature_units_dict.items()),
+            placeholder="Select a feature",
             value="",  # Default selected values (none selected initially)
-            className="w-full flex flex row flex-wrap",  # CSS classes for layout styling
+            className="",  # CSS classes for layout styling
             id="main_dropdown",  # Unique identifier for the checklist component
         ),
-        className="w-[28%]"
+        className="w-[20%]"
     )
 
 
@@ -82,7 +82,7 @@ def custom_dropdow(options, dropdown_values, radio_values, list):
                 first_feature_unit = get_feature_units(dropdown_value)
             except:
                 pass
-            
+
         dropdown_children.append(
             html.Div(
                 children=[
@@ -124,9 +124,9 @@ def custom_dropdow(options, dropdown_values, radio_values, list):
                 ],
                 # Layout styling for the dropdown and buttons
                 className=f"flex flex-row ml-[{index*25}px] my-4",
-            )    
-        )    
-    
+            )
+        )
+
     return dropdown_children
 
 # Function to list custom features for a client
@@ -156,24 +156,24 @@ def date_filter_dropdown():
     years = [2020, 2025]  # Year range
     months = [1, 12]  # Month range
     days = [0, 7]  # Day range (0=Monday, 6=Sunday)
-    
+
     # Generate month options for the dropdown
     month_names = [
         {'label': calendar.month_name[month], 'value': month}
         for month in range(months[0], months[1] + 1)
     ]
-    
+
     # Generate day options for the dropdown
     day_options = [
         {'label': calendar.day_name[day], 'value': day}
         for day in range(days[0], days[1])
     ]
-    
+
     # Ranges for dropdown selections
     year_range = [year for year in range(years[0], years[1] + 1)]
     month_range = [month["value"] for month in month_names]
     day_range = [day["value"] for day in day_options]
-    
+
     return [
         html.Div(
             children=[
@@ -253,7 +253,7 @@ def feature_filter_dropdown(client):
                             type="text",  # Input type
                             placeholder="+ Infinity",  # Placeholder text
                             className="mx-5 w-[65px]",  # Styling for the input
-                        )    
+                        )
                     ]),
                     # Button to add the filter
                     html.Div(

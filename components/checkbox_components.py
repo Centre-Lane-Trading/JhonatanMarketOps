@@ -17,11 +17,11 @@ def main_checkbox():
         dcc.Checklist(
             # Generate the options for the checklist dynamically
             # Extracts the keys (features) from the feature_units_dict
-            options=[item[0] for item in feature_units_dict.items()],
+            options=sorted(item[0] for item in feature_units_dict.items()),
             value=[],  # Default selected values (none selected initially)
             className="flex flex-row flex-wrap",  # CSS classes for layout styling
-            labelClassName="pr-10",  # CSS class for styling the labels of each checkbox
+            labelClassName="basis-1/5",  # CSS class for styling the labels of each checkbox
             id="main_checkbox",  # Unique identifier for the checklist component
         ),
-        className="w-[70%]"
+        className="w-[100%]"
     )
