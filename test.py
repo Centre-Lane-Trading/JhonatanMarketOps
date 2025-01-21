@@ -1,4 +1,5 @@
 
+from backend import Class
 from datetime import datetime
 
 # Example list of sorted datetime objects
@@ -39,5 +40,16 @@ def get_first_consecutive_datetime(datetime_axis):
     return result
 
 
-result = get_first_consecutive_datetime(datetime_axis)
+# result = get_first_consecutive_datetime(datetime_axis)
 
+def tester():
+    x = Class.Ops()
+    x.update_data_button('2025-1-15', '2025-1-16', ["MISO pjm DA", "PJM miso DA"])
+    x.create_custom_feature_button([{'Feature': 'MISO pjm DA'}, {'Feature': 'PJM miso DA', 'Operation': '-'}, {'Feature': 5, 'Operation': '-'}])
+    x.create_custom_feature_button([{'Feature': 'MISO pjm DA'}, {'Feature': 'PJM miso DA', 'Operation': '-'}, {'Feature': 5, 'Operation': '-'}], True)
+    # x.add_feature_filter_button("MISO pjm DA", 50.00, 1000)
+    x.apply_datetime_filters_button([4,5,6,7,8,9], x.day_of_week_filters, x.month_filters, x.year_filters)
+    
+    print(x.df)    
+    print(x.filter_df)
+tester()

@@ -46,7 +46,7 @@ class Ops:
         self.month_filters = list(range(12))
 
         # List of years to include when graphing with filters (2020-2025)
-        self.year_filters = list(range(2020, 2025))
+        self.year_filters = list(range(2020, 2026))
 
         # A list of dictoinaries, each representing a filter for a feature. Each feature filter dictionary has a unique id,
         # the feature the filter is for, and the range the feature value should be within
@@ -108,6 +108,7 @@ class Ops:
         self.update_data()
         self.add_created_features_to_df()
         self.update_datetimes_to_exclude()
+        print(self.datetimes_to_exclude)
         self.update_filter_df()
 
         #after running this function we need to update the graph's to reflect the updated self.df, self.filter_df and self.datetimes_to_exclude values
@@ -275,7 +276,7 @@ class Ops:
                     custom_name = "(" + features["Feature"]
                 
                 else:
-                    custom_name = custom_name + " " + features["Operation"] + " " + features["Feature"]
+                    custom_name = custom_name + " " + features["Operation"] + " " + str(features["Feature"])
 
             custom_name = custom_name + ")"
 
