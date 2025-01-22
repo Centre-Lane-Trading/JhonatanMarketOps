@@ -90,7 +90,7 @@ class Ops:
         #   Validate that a start_date and end_date are selected and that there is at least one entry in the data_features_input list
         #       - right now if you don't have at least one entry in the data_features_input list we get an error message but the app breaks
         #   Validate if all features that the feature_filters depend on are in the data_feature_input list
-        #   Validate if all features that Custom features depend on are still in the data_feature_input list
+        #   Validate if all features that Custom features depend on are in the data_feature_input list
         #       - If Either of these validations do not pass, show an error message with each feature_filter that will not be able to be created and each custom feature, along with the data feature missing
         #       - ex. Cannot create "MISO pjm DA - PJM miso DA" custom feature without "MISO pjm DA" data feature (Hint: delete "MISO pjm DA - PJM miso DA" or reselect "MISO pjm DA")
 
@@ -117,6 +117,7 @@ class Ops:
         # Validation TODO:
         #   - confirm that there are at least two features selected to create this feature
         #   - confirm that there is not another feature in the self.data_features list or the self.created_features list
+
         self.create_feature(feature_operation_list_input, cumulative_input, custom_name_input)
         self.add_created_features_to_df()
         self.update_filter_df()
@@ -127,7 +128,7 @@ class Ops:
     def remove_custom_feature_button(self, target_uid: str):
         # Validation TODO:
         #   - Confirm that there is not a feature filter that is dependent on the custom feature being requested to delete
-        #   - If There is tell the user and give a hint to delete the filter
+        #   - If There is tell the user and give a hint to delete the filter first
         removed_feature_name = ""
         for features in self.created_features:
             if features['feature_id'] == target_uid:
@@ -152,10 +153,10 @@ class Ops:
 
     def add_feature_filter_button(self, feature_name: str, lower_bound: float, upper_bound: float):
         # Selection Options:
-        #   - The user should only be able to select from the self.data_features list and the self.created_features list but only ones that don't have a feature filter already
+        #   - The user should only be able to select from the self.data_features list and the self.created_features list but only ones that don't already have a feature filter
         
         # Validation TODO:
-        #   - There is a feature selected and an upper bound and/or a lower bound inputted
+        #   - There is a feature selected and either an upper or lower bound selected
         #   - If there is an upper bound and a lower bound inputted confirm that the upper bound is greater than the lower bound
 
         new_feature_filter = {
@@ -200,7 +201,7 @@ class Ops:
 
         # after running this function we need to update the component that displays all the graphs in the self.graphs value
 
-    def update_data(self):
+    def update_data(self): # TODO: used to be update_df
         if self.data_features and self.start_date and self.end_date:
             db_names = []
             for feature in self.data_features:
@@ -215,7 +216,7 @@ class Ops:
     def update_data_features(self, new_data_features: list[str]):
         self.data_features = new_data_features
 
-    def update_datetime_filters(self, hours_to_include: list[int], days_of_week_to_include: list[int], months_to_include: list[int], years_to_include: list[int]):
+    def update_datetime_filters(self, hours_to_include: list[int], days_of_week_to_include: list[int], months_to_include: list[int], years_to_include: list[int]): # TODO: used to be update_date_filters and update_hour_filters (combined functions)
         self.hour_filters = hours_to_include
         self.day_of_week_filters = days_of_week_to_include
         self.month_filters = months_to_include
