@@ -76,8 +76,8 @@ mon_thurs = [0,1,2,3]
 fri = [4]
 sat = [5]
 sun = [6]
-buy_node = "PJM DPL_RESID_AGG DA"
-sell_node = "PJM DPL_RESID_AGG RTV"
+buy_node = "PJM BGE_RESID_AGG DA"
+sell_node = "PJM BGE_RESID_AGG RTV"
 
 df = pd.DataFrame(columns=['Total MWH', 'Net Profit', '#Wins', '$Won', '#Losses', '$Lost'])
 df = get_stats(df, '2024-11-1', '2025-1-14', all_hours, all_days, buy_node, sell_node)

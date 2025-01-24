@@ -97,11 +97,11 @@ class Ops:
 
         # Here are two for loops you can use to do these validations, please confirm that these make sense and work:
         # for filters in self.feature_filters:
-        #     if filters["feature_name"] not in new_data_features:
+        #     if filters["feature_name"] not in data_features_input:
         #         print(error_message)
         # for created_feature in self.created_features:
         #     for features in created_feature["equation"]:
-        #         if features["Feature"] not in new_data_features:
+        #         if features["Feature"] not in data_features_input:
         #             print(error_message)
 
         self.update_date_range(start_date_input, end_date_input)
@@ -117,13 +117,13 @@ class Ops:
     def create_custom_feature_button(self, feature_operation_list_input: list, cumulative_input: bool = False, custom_name_input:str = None):
         # Validation TODO:
         #   - confirm that there are at least two features selected to create this feature
-        #   - confirm that there is not another feature in the self.data_features list or the self.created_features list
+        #   - confirm that there is not another feature in the self.data_features list or the self.created_features list with the same name
 
         self.create_feature(feature_operation_list_input, cumulative_input, custom_name_input)
         self.add_created_features_to_df()
         self.update_filter_df()
 
-        #after running this function we need to update the graph's to reflect the updated self.df, self.filter_df and self.datetimes_to_exclude values
+        #after running this function we need to update the graph's to reflect the updated self.df and self.filter_df values
         #   - Also need to update  the list of created features displayed on the custom features tab 
 
     def remove_custom_feature_button(self, target_uid: str):
