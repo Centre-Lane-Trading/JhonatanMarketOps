@@ -12,6 +12,7 @@ import uuid
 from datetime import date, datetime, timedelta
 import unittest
 import pdb
+import copy
 
 
 class Ops:
@@ -43,7 +44,7 @@ class Ops:
         self.day_of_week_filters = list(range(7))
 
         # List of months to include when graphing with filters (0-11)
-        self.month_filters = list(range(12))
+        self.month_filters = list(range(1, 13))
 
         # List of years to include when graphing with filters (2020-2025)
         self.year_filters = list(range(2020, 2026))
@@ -316,6 +317,27 @@ class Ops:
         self.scatter_graphs = [
             graphs for graphs in self.scatter_graphs if graphs['graph_uid'] != target_uuid
         ]
+
+    def copy(self):
+        new_instance = Ops()
+        
+        new_instance.start_date = self.start_date
+        new_instance.end_date = self.end_date
+        new_instance.data_features = self.data_features.copy()
+        new_instance.df = self.df.copy()
+        new_instance.filter_df = self.filter_df.copy()
+        new_instance.graphs = copy.deepcopy(self.graphs)
+        new_instance.hour_filters = self.hour_filters.copy()
+        new_instance.day_of_week_filters = self.day_of_week_filters.copy()
+        new_instance.month_filters = self.month_filters.copy()
+        new_instance.year_filters = self.year_filters.copy()
+        new_instance.feature_filters = copy.deepcopy(self.feature_filters)
+        new_instance.datetimes_to_exclude = self.datetimes_to_exclude.copy()
+        new_instance.apply_filters_toggle = self.apply_filters_toggle
+        new_instance.created_features = copy.deepcopy(self.created_features)
+        new_instance.scatter_graphs = copy.deepcopy(self.scatter_graphs)
+        
+        return new_instance
 
     def download_df(self):
         self.df.to_csv("C:\\Users\\achowdhury\\Downloads\\candel_df.csv")

@@ -1,6 +1,7 @@
 
 from backend import Class
 from datetime import datetime
+import pandas as pd
 
 # Example list of sorted datetime objects
 datetime_axis = [
@@ -42,14 +43,97 @@ def get_first_consecutive_datetime(datetime_axis):
 
 # result = get_first_consecutive_datetime(datetime_axis)
 
-def tester():
-    x = Class.Ops()
-    x.update_data_button('2025-1-15', '2025-1-16', ["MISO pjm DA", "PJM miso DA"])
-    x.create_custom_feature_button([{'Feature': 'MISO pjm DA'}, {'Feature': 'PJM miso DA', 'Operation': '-'}, {'Feature': 5, 'Operation': '-'}])
-    x.create_custom_feature_button([{'Feature': 'MISO pjm DA'}, {'Feature': 'PJM miso DA', 'Operation': '-'}, {'Feature': 5, 'Operation': '-'}], True)
-    # x.add_feature_filter_button("MISO pjm DA", 50.00, 1000)
-    x.apply_datetime_filters_button([4,5,6,7,8,9], x.day_of_week_filters, x.month_filters, x.year_filters)
+def get_stats(df, start_date, end_date, hour_filters, day_filters, buy_node, sell_node): #start_date, end_date, hour_filters, day_filters, buy_node, sell_node
     
-    print(x.df)    
-    print(x.filter_df)
-tester()
+    net  = Class.Ops()
+    net.update_data_button(start_date, end_date, [sell_node, buy_node])   
+    net.create_custom_feature_button([{'Feature': sell_node}, {'Feature': buy_node, 'Operation': '-'}], False, "reg spread")
+    net.create_custom_feature_button([{'Feature': sell_node}, {'Feature': buy_node, 'Operation': '-'}], True, "cum spread")
+    net.apply_datetime_filters_button(hour_filters, day_filters, net.month_filters, net.year_filters)
+    
+    wins = Class.Ops()
+    wins = net.copy()
+    loss = Class.Ops()
+    loss = net.copy()
+    
+    wins.add_feature_filter_button('reg spread', 0.000, None)
+    loss.add_feature_filter_button('reg spread', None, 0.000)
+
+    new_row = pd.DataFrame({'Total MWH': [len(net.filter_df)], 'Net Profit': [round(net.filter_df['cum spread'].tail(1).values[0], 2)], '#Wins': [len(wins.filter_df)], '$Won': [round(wins.filter_df['cum spread'].tail(1).values[0],2)], '#Losses': [len(loss.filter_df)], '$Lost': [round(loss.filter_df['cum spread'].tail(1).values[0],2)]})
+    df = pd.concat([df, new_row], ignore_index=True)
+    return df
+    # print(f'Total MWH: {len(net.filter_df)}, Net Profit: {round(net.filter_df['cum spread'].tail(1).values[0], 2)}, #Wins: {len(wins.filter_df)}, $Won: {round(wins.filter_df['cum spread'].tail(1).values[0],2)}, #Losses: {len(loss.filter_df)}, $Lost: {round(loss.filter_df['cum spread'].tail(1).values[0],2)}')
+
+# get_stats('2024-11-1', '2025-1-14', [18], [0,1,2,3,4,5,6], "PJM DAY_RESID_AGG RTV", "PJM DAY_RESID_AGG DA")
+
+start_date = '2024-11-1'
+end_date = '2025-1-14'
+light_load = [0,1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,19,20,21,22,23]
+all_hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+all_days = [0,1,2,3,4,5,6]
+weekdays = [0,1,2,3,4]
+mon_thurs = [0,1,2,3]
+fri = [4]
+sat = [5]
+sun = [6]
+buy_node = "PJM DPL_RESID_AGG DA"
+sell_node = "PJM DPL_RESID_AGG RTV"
+
+df = pd.DataFrame(columns=['Total MWH', 'Net Profit', '#Wins', '$Won', '#Losses', '$Lost'])
+df = get_stats(df, '2024-11-1', '2025-1-14', all_hours, all_days, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', light_load, all_days, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', light_load, weekdays, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', light_load, mon_thurs, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', all_hours, fri, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', all_hours, sat, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', all_hours, sun, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', [6], all_days, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', [8], all_days, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', [17], all_days, buy_node, sell_node)
+df = get_stats(df, '2024-11-1', '2025-1-14', [18], all_days, buy_node, sell_node)
+print (df)
+
+df.to_csv("C:\\Users\\achowdhury\\Downloads\\node_analysis.csv")
+
+
+
+
+
+
+
+def tester():
+    # wins  = Class.Ops()
+    # wins.update_data_button('2024-11-1', '2025-1-14', ["PJM COMED_RESID_AGG DA", "PJM COMED_RESID_AGG RTV"])   
+    # wins.create_custom_feature_button([{'Feature': "PJM COMED_RESID_AGG DA"}, {'Feature': "PJM COMED_RESID_AGG RTV", 'Operation': '-'}], False, "reg spread")
+    # wins.create_custom_feature_button([{'Feature': "PJM COMED_RESID_AGG DA"}, {'Feature': "PJM COMED_RESID_AGG RTV", 'Operation': '-'}], True, "cum spread")
+    # wins.apply_datetime_filters_button([0,1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,19,20,21,22,23], [0,1,2,3, 4], wins.month_filters, wins.year_filters)
+    # print(wins.filter_df)
+    # wins.add_feature_filter_button('reg spread', 0.000, None)
+
+    # loss = Class.Ops()
+    # loss.update_data_button('2024-11-1', '2025-1-14', ["PJM COMED_RESID_AGG DA", "PJM COMED_RESID_AGG RTV"])   
+    # loss.create_custom_feature_button([{'Feature': "PJM COMED_RESID_AGG DA"}, {'Feature': "PJM COMED_RESID_AGG RTV", 'Operation': '-'}], False, "reg spread")
+    # loss.create_custom_feature_button([{'Feature': "PJM COMED_RESID_AGG DA"}, {'Feature': "PJM COMED_RESID_AGG RTV", 'Operation': '-'}], True, "cum spread")
+    # loss.apply_datetime_filters_button(wins.hour_filters, wins.day_of_week_filters, loss.month_filters, loss.year_filters)
+    # loss.add_feature_filter_button('reg spread', None, 0.000)
+
+    wins  = Class.Ops()
+    wins.update_data_button('2024-11-1', '2025-1-14', ["PJM DAY_RESID_AGG DA", "PJM DAY_RESID_AGG RTV"])   
+    wins.create_custom_feature_button([{'Feature': "PJM DAY_RESID_AGG DA"}, {'Feature': "PJM DAY_RESID_AGG RTV", 'Operation': '-'}], False, "reg spread")
+    wins.create_custom_feature_button([{'Feature': "PJM DAY_RESID_AGG DA"}, {'Feature': "PJM DAY_RESID_AGG RTV", 'Operation': '-'}], True, "cum spread")
+    wins.apply_datetime_filters_button([18], [0,1,2,3,4,5,6], wins.month_filters, wins.year_filters)
+    print(wins.filter_df)
+    wins.add_feature_filter_button('reg spread', 0.000, None)
+
+    loss = Class.Ops()
+    loss.update_data_button('2024-11-1', '2025-1-14', ["PJM DAY_RESID_AGG DA", "PJM DAY_RESID_AGG RTV"])   
+    loss.create_custom_feature_button([{'Feature': "PJM DAY_RESID_AGG DA"}, {'Feature': "PJM DAY_RESID_AGG RTV", 'Operation': '-'}], False, "reg spread")
+    loss.create_custom_feature_button([{'Feature': "PJM DAY_RESID_AGG DA"}, {'Feature': "PJM DAY_RESID_AGG RTV", 'Operation': '-'}], True, "cum spread")
+    loss.apply_datetime_filters_button(wins.hour_filters, wins.day_of_week_filters, loss.month_filters, loss.year_filters)
+    loss.add_feature_filter_button('reg spread', None, 0.000)
+  
+    print(wins.filter_df)
+    print(len(wins.filter_df))
+    print(loss.filter_df)
+    print(len(loss.filter_df))
+# tester()
