@@ -1,4 +1,4 @@
-from backend.endpoint_helper import simple_request
+from backend.endpoint_helper import simple_feature_request, simple_request_entities
 from backend.db_dictionaries import (
     feature_db_id_to_read_name,
     feature_db_name_to_read_name_dict,
@@ -13,10 +13,23 @@ from datetime import date, datetime, timedelta
 import unittest
 import pdb
 import copy
+from features_class import feature_class
 
 
 class Ops:
     def __init__(self) -> None:
+        data = simple_request_entities('feature', 20000)
+
+
+        display_name_features: list[feature_class] = []
+        db_name_features: list[feature_class] = []
+        for entry in data:
+            feature = feature_class()
+            feature.read_data(entry['id'], entry['name'], entry['display_name'], entry['unit'])
+            if feature.display_name is not None:
+                display_name_features.append(feature)
+            else:
+                db_name_features.append(feature)
 
         # Start date for the range of dates the user wants data for
         self.start_date = date.today() - timedelta(7)
@@ -207,7 +220,7 @@ class Ops:
             db_names = []
             for feature in self.data_features:
                 db_names.append(feature_read_name_to_db_name_dict[feature])
-            self.df = simple_request(self.start_date, self.end_date, db_names)[0]
+            self.df = simple_feature_request(self.start_date, self.end_date, db_names)[0]  #TODO: confirm this update in the endpoint helper works
             self.df.rename(columns=feature_db_name_to_read_name_dict, inplace=True)
 
     def update_date_range(self, new_start, new_end):
