@@ -13,23 +13,36 @@ from datetime import date, datetime, timedelta
 import unittest
 import pdb
 import copy
-from features_class import feature_class
+from backend.features_class import *
 
 
 class Ops:
     def __init__(self) -> None:
-        data = simple_request_entities('feature', 20000)
-
-
-        display_name_features: list[feature_class] = []
-        db_name_features: list[feature_class] = []
-        for entry in data:
+        feature_json = simple_request_entities('feature', 20000)
+        feature_list: list[feature_class] = []
+        for entry in feature_json:
             feature = feature_class()
             feature.read_data(entry['id'], entry['name'], entry['display_name'], entry['unit'])
-            if feature.display_name is not None:
-                display_name_features.append(feature)
+            feature_list.append(feature)
+
+        feature_dict = {
+            obj.display_name if obj.display_name is not None else obj.db_name: obj
+            for obj in feature_list
+        }
+
+        available_readable_names = []
+        available_db_names = []
+        for feature in feature_dict.values():
+            if feature.display_name:
+                available_readable_names.append(feature.display_name)
             else:
-                db_name_features.append(feature)
+                available_db_names.append(feature.db_name)
+
+        self.feature_dict = feature_dict
+
+        self.available_readable_names = available_readable_names
+
+        self.available_db_names = available_db_names
 
         # Start date for the range of dates the user wants data for
         self.start_date = date.today() - timedelta(7)
@@ -220,7 +233,7 @@ class Ops:
             db_names = []
             for feature in self.data_features:
                 db_names.append(feature_read_name_to_db_name_dict[feature])
-            self.df = simple_feature_request(self.start_date, self.end_date, db_names)[0]  #TODO: confirm this update in the endpoint helper works
+            self.df = simple_feature_request(self.start_date, self.end_date, db_names)[0]
             self.df.rename(columns=feature_db_name_to_read_name_dict, inplace=True)
 
     def update_date_range(self, new_start, new_end):

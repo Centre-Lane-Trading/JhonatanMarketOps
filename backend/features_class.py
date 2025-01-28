@@ -1,4 +1,4 @@
-from endpoint_helper import *
+from backend.endpoint_helper import *
 
 
 class feature_class:
@@ -17,23 +17,21 @@ class feature_class:
         self.display_name = display_name_input
 
 
-data = simple_request_entities('feature', 20000)
-
-
-display_name_features: list[feature_class] = []
-db_name_features: list[feature_class] = []
-for entry in data:
+feature_json = simple_request_entities('feature', 20000)
+feature_list: list[feature_class] = []
+for entry in feature_json:
     feature = feature_class()
     feature.read_data(entry['id'], entry['name'], entry['display_name'], entry['unit'])
-    if feature.display_name is not None:
-        display_name_features.append(feature)
-    else:
-        db_name_features.append(feature)
-print('display names')
-for features in display_name_features:
-    print(f'ID: {features.id}, Name: {features.db_name}, Display Name: {features.display_name}, Units: {features.units}')
-# print('no display names')
-# for features in db_name_features:
-#     print(f'ID: {features.id}, Name: {features.db_name}, Display Name: {features.display_name}, Units: {features.units}')
-    
-    
+    feature_list.append(feature)
+
+feature_dict = {
+    obj.display_name if obj.display_name is not None else obj.db_name: obj
+    for obj in feature_list
+}
+
+display_names_list = []
+for feature in feature_dict.values():
+    if feature.display_name:
+        display_names_list.append(feature.display_name)
+
+print(display_names_list)
