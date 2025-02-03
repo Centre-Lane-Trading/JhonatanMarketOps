@@ -13,7 +13,20 @@ from datetime import date, datetime, timedelta
 import unittest
 import pdb
 import copy
-from backend.features_class import *
+
+class feature_class:
+    def __init__(self) -> None:
+        # Start date for the range of dates the user wants data for
+        self.id = ''
+        self.db_name = ''
+        self.units = ''
+        self.display_name = ''
+    
+    def read_data(self, id_input, db_name_input, display_name_input, units_input):
+        self.id = id_input
+        self.db_name = db_name_input
+        self.units = units_input
+        self.display_name = display_name_input
 
 
 class Ops:
