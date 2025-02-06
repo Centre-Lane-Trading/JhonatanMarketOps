@@ -44,12 +44,16 @@ class Ops:
         }
 
         available_readable_names = []
+        db_to_display_names_dict = {}
         available_db_names = []
         for feature in feature_dict.values():
             if feature.display_name:
                 available_readable_names.append(feature.display_name)
+                db_to_display_names_dict[feature.db_name] = feature.display_name
             else:
                 available_db_names.append(feature.db_name)
+
+        self.db_to_display_names_dict = db_to_display_names_dict
 
         self.feature_dict = feature_dict
 
@@ -245,9 +249,9 @@ class Ops:
         if self.data_features and self.start_date and self.end_date:
             db_names = []
             for feature in self.data_features:
-                db_names.append(feature_read_name_to_db_name_dict[feature])
+                db_names.append(self.feature_dict[feature].db_name)
             self.df = simple_feature_request(self.start_date, self.end_date, db_names)[0]
-            self.df.rename(columns=feature_db_name_to_read_name_dict, inplace=True)
+            self.df.rename(columns=self.db_to_display_names_dict, inplace=True)
 
     def update_date_range(self, new_start, new_end):
         self.start_date = new_start
@@ -324,7 +328,7 @@ class Ops:
             if cumulative:
                 custom_name = custom_name + "Σ" 
 
-        custom_feature_unit = get_feature_units(feature_operation_list[0]["Feature"])
+        custom_feature_unit = self.feature_dict[feature_operation_list[0]["Feature"]].units
         self.created_features.append(
             {
             "feature_name": custom_name,

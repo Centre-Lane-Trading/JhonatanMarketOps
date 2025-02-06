@@ -68,7 +68,7 @@ def get_stats(df, start_date, end_date, hour_filters, day_filters, buy_node, sel
 
 # start_date = '2024-11-1'
 # end_date = '2025-1-14'
-light_load = [0,1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,19,20,21,22,23]
+light_load = [0,1,2,3,4,5,6,7,10,11,12,13,14,15,16,19,20,21,22,23]
 peak_load = [6,17,18]
 all_hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
 all_days = [0,1,2,3,4,5,6]
@@ -82,22 +82,22 @@ thurs = [3]
 fri = [4]
 sat = [5]
 sun = [6]
-buy_node = "PJM PEPCOMD RTV"
-sell_node = "PJM PEPCOMD DA"
+buy_node = "PJ PEPCOMD RTV"
+sell_node = "PJ PEPCOMD DA"
 
 df = pd.DataFrame(columns=['Total MWH', 'Net Profit', '#Wins', '$Won', '#Losses', '$Lost'])
-df = get_stats(df, '2024-1-22', '2025-2-4', all_hours, all_days, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', light_load, all_days, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', light_load, weekdays, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', light_load, mon_thurs, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', all_hours, fri, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', all_hours, sat, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', all_hours, sun, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', [6], all_days, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', [8], all_days, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', [17], all_days, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', [18], all_days, buy_node, sell_node)
-df = get_stats(df, '2024-1-22', '2025-2-4', all_hours, weekdays, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', all_hours, all_days, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', light_load, all_days, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', light_load, weekdays, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', light_load, mon_thurs, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', all_hours, fri, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', all_hours, sat, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', all_hours, sun, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', [6], all_days, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', [8], all_days, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', [17], all_days, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', [18], all_days, buy_node, sell_node)
+df = get_stats(df, '2024-1-26', '2025-2-7', all_hours, weekdays, buy_node, sell_node)
 
 print(buy_node)
 print (df)
