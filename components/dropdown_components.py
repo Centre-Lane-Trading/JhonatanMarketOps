@@ -9,7 +9,7 @@ import calendar
 from backend.db_dictionaries import feature_units_dict
 
 
-def main_dropdown():
+def main_dropdown(client):
     """
     Creates a checklist (checkbox group) for selecting features.
 
@@ -21,10 +21,11 @@ def main_dropdown():
         dcc.Dropdown(
             # Generate the options for the checklist dynamically
             # Extracts the keys (features) from the feature_units_dict
-            options=[item[0] for item in feature_units_dict.items()],
+            options=[item for item in client.available_readable_names],
             value="",  # Default selected values (none selected initially)
             className="w-full flex flex row flex-wrap",  # CSS classes for layout styling
             id="main_dropdown",  # Unique identifier for the checklist component
+            multi=True,
         ),
         className="w-[28%] mt-10"
     )
@@ -93,7 +94,7 @@ def custom_dropdow(client, current_dropdown):
                 ),
             ],
             # Layout styling for the dropdown and buttons
-            className=f"flex flex-row my-4",
+            className=f"flex flex-row my-4 mr-5",
         )    
     )
     
@@ -300,7 +301,7 @@ def feature_filter_dropdown(client):
                 children=[
                     # Dropdown for selecting features
                     dcc.Dropdown(
-                        options=[feature for feature in client.data_features],  # Feature options
+                        options=[feature for feature in client.data_features] if (client.data_features != []) else [],  # Feature options
                         value=[],  # Default selected value
                         id="feature_filter_dropdown",  # Unique ID for the dropdown
                         multi=False,  # Allow single selection
