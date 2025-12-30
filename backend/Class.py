@@ -120,8 +120,8 @@ class Ops:
         # List of months to include when graphing with filters (0-11)
         self.month_filters: list[int] = list(range(1, 13))
 
-        # List of years to include when graphing with filters (2020-2025)
-        self.year_filters: list[int] = list(range(2020, 2026))
+        # List of years to include when graphing with filters (2020-2030)
+        self.year_filters: list[int] = list(range(2020, 2030))
 
         # A list of dictoinaries, each representing a filter for a feature. Each feature filter dictionary has a unique id,
         # the feature the filter is for, and the range the feature value should be within
