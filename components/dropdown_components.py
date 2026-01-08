@@ -128,7 +128,7 @@ def date_filter_dropdown():
     Returns:
         list: A list of HTML Div elements containing dropdowns for year, month, and day.
     """
-    years = [2020, 2025]  # Year range
+    years = [2020, 2030]  # Year range
     months = [1, 12]  # Month range
     days = [0, 7]  # Day range (0=Monday, 6=Sunday)
 
